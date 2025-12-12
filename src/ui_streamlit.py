@@ -13,7 +13,7 @@ import pandas as pd
 import streamlit as st
 
 from models import Subject, UserConfig
-from scheduler import generate_schedule
+from scheduler import generate_weekly_grid_schedule
 
 WEEKDAY_LABELS = ["월", "화", "수", "목", "금", "토", "일"]
 
@@ -207,7 +207,7 @@ def main() -> None:
     # 생성 버튼
     if st.button("📅 스케줄 생성", type="primary"):
         cfg = build_config()
-        schedule = generate_schedule(cfg)
+        blocks = generate_weekly_grid_schedule(cfg, start_date=date.today())
 
         rows = []
         for day in schedule:
