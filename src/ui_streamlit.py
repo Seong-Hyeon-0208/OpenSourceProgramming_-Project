@@ -17,14 +17,57 @@ from scheduler import generate_schedule
 
 WEEKDAY_LABELS = ["월", "화", "수", "목", "금", "토", "일"]
 
+from models import TimeBlock
+from scheduler import generate_weekly_grid_schedule
+
+def hhmm_to_min(hhmm: str) -> int:
+    h, m = hhmm.split(":")
+    return int(h) * 60 + int(m)
+
+st.subheader("4) 공부 불가능 시간(강의/식사 등) 설정")
+
+if "busy_blocks" not in st.session_state:
+    st.session_state["busy_blocks"] = []
+
+with st.form("busy_form", clear_on_submit=True):
+    c1, c2, c3, c4 = st.columns(4)
+    with c1:
+        w = st.selectbox("요일", options=list(range(7)), format_func=lambda i: WEEKDAY_LABELS[i])
+    with c2:
+        start = st.text_input("시작(HH:MM)", value="12:00")
+    with c3:
+        end = st.text_input("끝(HH:MM)", value="13:00")
+    with c4:
+        label = st.text_input("이름", value="점심")
+
+    submitted = st.form_submit_button("➕ 불가능 시간 추가")
+    if submitted:
+        st.session_state["busy_blocks"].append({
+            "weekday": w,
+            "start_min": hhmm_to_min(start),
+            "end_min": hhmm_to_min(end),
+            "label": label
+        })
+
+# 목록 표시 + 삭제
+for idx, b in enumerate(st.session_state["busy_blocks"]):
+    cols = st.columns([2,2,2,3,1])
+    cols[0].write(WEEKDAY_LABELS[b["weekday"]])
+    cols[1].write(f'{b["start_min"]//60:02d}:{b["start_min"]%60:02d}')
+    cols[2].write(f'{b["end_min"]//60:02d}:{b["end_min"]%60:02d}')
+    cols[3].write(b["label"])
+    if cols[4].button("삭제", key=f"del_busy_{idx}"):
+        st.session_state["busy_blocks"].pop(idx)
+        st.rerun()
+
 
 def init_state() -> None:
     if "subjects" not in st.session_state:
         today = date.today()
         st.session_state["subjects"] = [
-            {"name": "선형대수학", "weekly": 4.0, "exam": today + timedelta(days=21)},
-            {"name": "데이터통신", "weekly": 3.0, "exam": today + timedelta(days=14)},
-            {"name": "컴퓨터구조", "weekly": 3.0, "exam": today + timedelta(days=28)},
+            {"name": "과목 이름", "weekly": 4.0, "exam": today + timedelta(days=21)},
+            {"name": "과목 이름", "weekly": 3.0, "exam": today + timedelta(days=14)},
+            {"name": "과목 이름", "weekly": 3.0, "exam": today + timedelta(days=28)},
         ]
     if "daily_hours" not in st.session_state:
         # 평일 3h, 주말 1h 기본값
@@ -60,7 +103,17 @@ def build_config() -> UserConfig:
 
     daily = {int(k): float(v) for k, v in st.session_state["daily_hours"].items()}
     horizon = int(st.session_state["horizon"])
-
+    
+    busy = [
+    TimeBlock(
+        weekday=b["weekday"],
+        start_min=b["start_min"],
+        end_min=b["end_min"],
+        label=b["label"],
+        kind="busy",
+    )
+    for b in st.session_state["busy_blocks"]
+    ]
     mode = st.session_state["study_mode"]
     if mode.startswith("장기"):
         min_block, max_block = 2.0, 3.0
@@ -73,6 +126,10 @@ def build_config() -> UserConfig:
         planning_horizon_days=horizon,
         min_block_hours=min_block,
         max_block_hours=max_block,
+        busy_blocks=busy, 
+        day_start_hour=9, 
+        day_end_hour=24, 
+        slot_minutes=30
     )
 
 
@@ -186,3 +243,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
