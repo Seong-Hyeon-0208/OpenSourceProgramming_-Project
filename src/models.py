@@ -33,6 +33,11 @@ class UserConfig:
     min_block_hours: float = 1.0
     max_block_hours: float = 2.0
 
+    day_start_hour: int = 9
+    day_end_hour: int = 24
+    slot_minutes: int = 30
+    busy_blocks: List[TimeBlock] = field(default_factory=list)
+
 
 @dataclass
 class StudyBlock:
