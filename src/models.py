@@ -1,18 +1,7 @@
-
 from dataclasses import dataclass, field
 from datetime import date
 from typing import List, Dict
 
-from dataclasses import dataclass
-
-@dataclass
-class TimeBlock:
-    # weekday: 0=월 ... 6=일
-    weekday: int
-    start_min: int   # 0~1440 (분 단위)
-    end_min: int
-    label: str
-    kind: str = "busy"  # "busy" or "study"
 
 @dataclass
 class Subject:
@@ -23,19 +12,38 @@ class Subject:
 
 
 @dataclass
+class TimeBlock:
+    """
+    A time block in weekly grid.
+    weekday: 0=Mon .. 6=Sun
+    start_min/end_min: minutes from 00:00 (0~1440)
+    kind: "busy" or "study"
+    """
+    weekday: int
+    start_min: int
+    end_min: int
+    label: str
+    kind: str = "busy"
+
+
+@dataclass
 class UserConfig:
     """Scheduler configuration."""
     subjects: List[Subject]
-    daily_available_hours: Dict[int, float]  # weekday (0=Mon..6=Sun) -> hours
+
+    # 스케줄 기간(일)
     planning_horizon_days: int = 7
 
-    # 학습 유형에 따라 UI에서 자동 설정됨
+    # 학습 유형(분배형/몰입형)에 의해 설정됨
     min_block_hours: float = 1.0
     max_block_hours: float = 2.0
 
+    # 시간표 범위 및 슬롯 크기
     day_start_hour: int = 9
     day_end_hour: int = 24
     slot_minutes: int = 30
+
+    # 공부 불가 시간(강의/식사 등)
     busy_blocks: List[TimeBlock] = field(default_factory=list)
 
 
