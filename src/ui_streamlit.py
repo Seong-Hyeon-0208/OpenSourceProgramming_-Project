@@ -244,3 +244,29 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+blocks = generate_weekly_grid_schedule(cfg)
+
+# 30분 슬롯 그리드 생성
+slot = cfg.slot_minutes
+start_min = cfg.day_start_hour * 60
+end_min = cfg.day_end_hour * 60
+
+times = list(range(start_min, end_min, slot))
+grid = { "시간": [f"{t//60:02d}:{t%60:02d}" for t in times] }
+for i, wd in enumerate(WEEKDAY_LABELS):
+    grid[wd] = [""] * len(times)
+
+def fill(block, text):
+    for t in range(block.start_min, block.end_min, slot):
+        if t in times:
+            r = times.index(t)
+            grid[WEEKDAY_LABELS[block.weekday]][r] = text
+
+# busy 먼저 채우고, study가 덮어쓰게(or 반대)
+for b in blocks:
+    text = f"⛔ {b.label}" if b.kind == "busy" else f"📘 {b.label}"
+    fill(b, text)
+
+df_grid = pd.DataFrame(grid)
+st.subheader("🗓️ 주간 시간표 (가로=요일, 세로=시간)")
+st.dataframe(df_grid, use_container_width=True)
