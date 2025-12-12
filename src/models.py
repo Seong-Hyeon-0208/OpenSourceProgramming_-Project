@@ -3,6 +3,16 @@ from dataclasses import dataclass, field
 from datetime import date
 from typing import List, Dict
 
+from dataclasses import dataclass
+
+@dataclass
+class TimeBlock:
+    # weekday: 0=월 ... 6=일
+    weekday: int
+    start_min: int   # 0~1440 (분 단위)
+    end_min: int
+    label: str
+    kind: str = "busy"  # "busy" or "study"
 
 @dataclass
 class Subject:
