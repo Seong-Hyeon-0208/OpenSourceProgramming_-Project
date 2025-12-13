@@ -2,16 +2,32 @@
 # Smart Study Scheduler
 
 개인화 학습 스케줄 자동 생성 AI (파이썬 / Streamlit 데모 프로젝트)
+본 프로젝트는 사용자의 과목 정보, 시험 일정, 가용 시간, 학습 유형을 입력받아  
+**주간 학습 시간표를 자동으로 생성하는 웹 애플리케이션**입니다.
+
+---
+
+## 개발 환경
+
+- Python **3.11.x** (권장)
+- Streamlit
+- pytest
+- GitHub Actions (CI)
+
+---
+
 ## 설치 방법 (Installation)
 
 ```bash
-python 3.11.0 권장
-프로젝트 압축파일 저장 후 압축해제
-cd smart-study-scheduler (저장된 파일 위치)
+# Python 3.11 이상 권장
+# 프로젝트 클론 또는 압축 해제 후
+cd OpenSourceProgramming_-Project
 
 python -m venv venv
-# Windows: venv\Scripts\activate
-# Linux/macOS: source venv/bin/activate
+# Windows
+venv\Scripts\activate
+# macOS / Linux
+source venv/bin/activate
 
 pip install -r requirements.txt
 ```
@@ -21,9 +37,16 @@ pip install -r requirements.txt
 ```bash
 streamlit run src/ui_streamlit.py
 ```
-
-브라우저에서 과목 정보와 요일별 가용 시간을 입력한 뒤,
-'스케줄 생성' 버튼을 눌러 결과를 확인할 수 있습니다.
+실행 후 브라우저에서 다음 기능을 사용할 수 있습니다.
+과목 추가 / 삭제
+과목별 주당 학습 시간 설정
+시험 날짜 입력 (시험 이후 자동 제외)
+학습 유형 선택
+장기 몰입형 (2~3시간)
+분배형 (1~2시간)
+요일별 공부 불가능 시간 설정
+색 이모지(🟥🟧🟨🟩🟦🟪) 기반 시간표 출력
+CSV 다운로드
 
 ## 프로젝트 구조
 
