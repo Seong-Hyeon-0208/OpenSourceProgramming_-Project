@@ -5,6 +5,7 @@
 ## 설치 방법 (Installation)
 
 ```bash
+python 3.11.0 권장
 프로젝트 압축파일 저장 후 압축해제
 cd smart-study-scheduler (저장된 파일 위치)
 
