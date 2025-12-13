@@ -5,8 +5,8 @@
 ## 설치 방법 (Installation)
 
 ```bash
-git clone https://github.com/USERNAME/smart-study-scheduler.git
-cd smart-study-scheduler
+프로젝트 압축파일 저장 후 압축해제
+cd smart-study-scheduler (저장된 파일 위치)
 
 python -m venv venv
 # Windows: venv\Scripts\activate
