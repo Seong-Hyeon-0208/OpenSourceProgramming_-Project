@@ -3,7 +3,7 @@ from datetime import date, timedelta
 
 from models import Subject, UserConfig
 from scheduler import generate_schedule
-
+from src.models import Subject, UserConfig
 
 def test_exam_date_exclusion():
     today = date.today()
