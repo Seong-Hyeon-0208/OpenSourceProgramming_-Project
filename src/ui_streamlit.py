@@ -157,7 +157,7 @@ def main():
     st.set_page_config(page_title="Smart Study Scheduler", layout="wide")
     init_state()
 
-    st.title("🗓️ Smart Study Scheduler (과목 색 이모지 버전)")
+    st.title("🗓️ Smart Study Scheduler")
 
     # 1) 과목 설정
     st.subheader("1) 과목 설정")
